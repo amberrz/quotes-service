@@ -16,7 +16,7 @@ import org.springframework.lang.NonNull;
 public class Source {
 
   @SuppressWarnings("JpaDataSourceORMInspection")
-  @NonNull
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "source_id", nullable = false, updatable = false)
@@ -26,19 +26,19 @@ public class Source {
   @Column(length = 100, nullable = false, unique = true)
   private String name;
 
-  @NonNull
+
   @CreationTimestamp
   @Temporal(TemporalType.TIMESTAMP)
   @Column(nullable = false, updatable = false)
   private Date created;
 
-  @NonNull
+
   @UpdateTimestamp
   @Temporal(TemporalType.TIMESTAMP)
   @Column(nullable = false)
   private Date updated;
 
-  @NonNull
+
   public Long getId() {
     return id;
   }
@@ -52,12 +52,11 @@ public class Source {
     this.name = name;
   }
 
-  @NonNull
   public Date getCreated() {
     return created;
   }
 
-  @NonNull
+
   public Date getUpdated() {
     return updated;
   }
