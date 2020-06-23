@@ -1,7 +1,6 @@
 package edu.cnm.deepdive.quotes.controller;
 
 
-
 import edu.cnm.deepdive.quotes.model.entity.Quote;
 import edu.cnm.deepdive.quotes.model.entity.Source;
 import edu.cnm.deepdive.quotes.service.QuoteRepository;
@@ -45,15 +44,16 @@ public class SourceController {
     return sourceRepository.save(source);
   }
 
-@GetMapping(value = "/{id:\\d+}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value = "/{id:\\d+}", produces = MediaType.APPLICATION_JSON_VALUE)
   public Source get(@PathVariable long id) {
-  return sourceRepository.findById(id).orElseThrow(NoSuchElementException::new);
-}
-@GetMapping(value = "/{id:\\d+}/quotes", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Iterable<Quote>getQuotes(@PathVariable long id) {
+    return sourceRepository.findById(id).orElseThrow(NoSuchElementException::new);
+  }
+
+  @GetMapping(value = "/{id:\\d+}/quotes", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Iterable<Quote> getQuotes(@PathVariable long id) {
     return sourceRepository.findById(id)
         .map((source) -> quoteRepository.getAllBySourceOrderByTextAsc(source))
         .get();
-}
+  }
 }
 
