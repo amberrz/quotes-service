@@ -1,11 +1,20 @@
 package edu.cnm.deepdive.quotes.model.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import edu.cnm.deepdive.quotes.view.FlatQuote;
+import edu.cnm.deepdive.quotes.view.FlatTag;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,7 +23,7 @@ import org.springframework.lang.NonNull;
 
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
-public class Tag {
+public class Tag implements FlatTag {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,18 +46,30 @@ public class Tag {
   @Column(nullable = false)
   private String name;
 
+@ManyToMany(fetch = FetchType.LAZY,
+    mappedBy = "tags",
+    cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+)
+@OrderBy("text ASC")
+@JsonSerialize(contentAs = FlatQuote.class)
+private List<Quote> quote = new LinkedList<>();
+
+  @Override
   public Long getId() {
     return id;
   }
 
+  @Override
   public Date getCreated() {
     return created;
   }
 
+  @Override
   public Date getUpdated() {
     return updated;
   }
 
+  @Override
   @NonNull
   public String getName() {
     return name;
@@ -56,6 +77,10 @@ public class Tag {
 
   public void setName(@NonNull String name) {
     this.name = name;
+  }
+
+  public List<Quote> getQuote() {
+    return quote;
   }
 
 }

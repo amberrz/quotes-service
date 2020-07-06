@@ -31,7 +31,13 @@ public class TagController {
     return tagRepository.getAllByOrderByNameAsc();
   }
 
-  @GetMapping(value = "/{id\\d+/quotes", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value = "/{id:\\d+}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Tag get(@PathVariable long id) {
+    return tagRepository.findById(id)
+        .orElseThrow(NoSuchElementException::new);
+  }
+
+  @GetMapping(value = "/{id:\\d+/quotes", produces = MediaType.APPLICATION_JSON_VALUE)
   public Iterable<Quote> getQuotes(@PathVariable long id) {
     return tagRepository.findById(id)
         .map(quoteRepository::getAllByTagsContainingOrderByTextAsc)
