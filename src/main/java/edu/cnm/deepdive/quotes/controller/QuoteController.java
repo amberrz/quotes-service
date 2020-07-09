@@ -9,8 +9,10 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.server.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/quotes")
+@ExposesResourceFor(Quote.class) // TODO Adjust when copying to other controllers.
 public class QuoteController {
 
   private final QuoteRepository quoteRepository;
@@ -44,8 +47,7 @@ public class QuoteController {
 
   @PostMapping(
       consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseStatus(HttpStatus.CREATED)
-  public Quote post(@RequestBody Quote quote) {
+  public ResponseEntity<Quote> post(@RequestBody Quote quote) {
     if (quote.getSource() != null && quote.getSource().getId() != null) {
       quote.setSource(sourceRepository.findById(quote.getSource().getId()).orElseThrow(
           NoSuchElementException::new)
@@ -56,7 +58,8 @@ public class QuoteController {
         .collect(Collectors.toList());
     quote.getTags().clear();;
     quote.getTags().addAll(resolvedTags);
-    return quoteRepository.save(quote);
+    quoteRepository.save(quote);
+    return ResponseEntity.created(quote.getHref()).body(quote);
 
   }
 
@@ -73,6 +76,6 @@ public class QuoteController {
   @PostMapping(value = "/{id:\\d+}text",
   produces = MediaType.TEXT_PLAIN_VALUE, consumes = MediaType.TEXT_PLAIN_VALUE)
   public String putText(@PathVariable long id, @RequestBody String text) {
-
+return null;
   }
 }
