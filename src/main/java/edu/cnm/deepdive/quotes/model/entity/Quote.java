@@ -118,6 +118,10 @@ public class Quote implements FlatQuote {
     return tags;
   }
 
+  public void setContributor(User contributor) {
+    this.contributor = contributor;
+  }
+
   @PostConstruct
   private void initHateoas() {
     //noinspection ResultOfMethodCallIgnored
