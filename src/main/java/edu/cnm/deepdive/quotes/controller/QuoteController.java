@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/quotes")
-@ExposesResourceFor(Quote.class) // TODO Adjust when copying to other controllers.
+@ExposesResourceFor(Quote.class)
 public class QuoteController {
 
   private final QuoteRepository quoteRepository;
