@@ -35,7 +35,7 @@ import org.springframework.stereotype.Component;
 @Entity
 @Component
 @JsonIgnoreProperties(
-    value = {"id", "created", "href"},
+    value = {"id", "created", "updated", "href"},
     allowGetters = true,
     ignoreUnknown = true
 )
@@ -69,7 +69,7 @@ public class Quote implements FlatQuote {
   private Source source;
 
   @ManyToOne(fetch = FetchType.EAGER,
-      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(name = "contributor_id")
   private User contributor;
 
@@ -114,12 +114,16 @@ public class Quote implements FlatQuote {
     this.source = source;
   }
 
-  public List<Tag> getTags() {
-    return tags;
+  public User getContributor() {
+    return contributor;
   }
 
   public void setContributor(User contributor) {
     this.contributor = contributor;
+  }
+
+  public List<Tag> getTags() {
+    return tags;
   }
 
   @PostConstruct
